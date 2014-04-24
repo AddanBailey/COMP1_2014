@@ -1,0 +1,16 @@
+
+#Task 3a
+1. GetPlayerName()
+2.By using validation
+3.
+
+#Task 3b
+1.UpdateRecentScores(RecentScores, Score)
+
+#Task 5
+1.
+2.__init__(self)
+  ResetRecentScores
+  DisplayRecentScores
+  UpdateRecentScores(RecentScores, Score)
+  
