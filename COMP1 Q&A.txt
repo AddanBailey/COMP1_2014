@@ -13,4 +13,7 @@
   ResetRecentScores
   DisplayRecentScores
   UpdateRecentScores(RecentScores, Score)
+3.("%d/%m/%Y")
+
+1.
   
