@@ -74,6 +74,7 @@ def DisplayMenu():
   print('2. Play game (without shuffle)')
   print('3. Display recent scores')
   print('4. Reset recent scores')
+  print('5. Options')
   print()
   print('Select an option from the menu (or enter q to quit): ', end='')
 
@@ -84,6 +85,37 @@ def GetMenuChoice():
     Choice = 'q'
   print()
   return Choice
+
+def DisplayOptions():
+  print()
+  print('OPTION MENU')
+  print()
+  print('1. Set Ace to be HIGH or LOW')
+  print()
+  
+def GetOptionChoice():
+  OptionChoice = input('Select an option from the menu (or enter q to quit): ')
+  if OptionChoice == 'quit':
+    OptionChoice = 'q'
+    DisplayMenu()
+  else:
+    SetOptionChoice(OptionChoice)
+  print()
+  return OptionChoice
+  
+def SetOptionChoice(OptionChoice):
+  if OptionChoice == '1':
+    SetAceHighOrLow()
+ 
+def SetAceHighOrLow():
+  AceHighOrLow = input('Do you want the Ace to be (h)igh or (l)ow: ')
+  AceHighOrLow = AceHighOrLow.lower()
+  if AceHighOrLow == 'h':
+
+
+    
+  elif AceHighOrLow == 'l':
+    LoadDeck(Deck) 
 
 def LoadDeck(Deck):
   CurrentFile = open('deck.txt', 'r')
@@ -275,3 +307,6 @@ if __name__ == '__main__':
       DisplayRecentScores(RecentScores)
     elif Choice == '4':
       ResetRecentScores(RecentScores)
+    elif Choice == '5':
+      DisplayOptions()
+      GetOptionChoice()
