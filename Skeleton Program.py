@@ -23,6 +23,8 @@ class TRecentScore():
 Deck = [None]
 RecentScores = [None]
 Choice = ''
+SetAceHigh = False
+
 
 def GetRank(RankNo):
   Rank = ''
@@ -94,29 +96,27 @@ def DisplayOptions():
   print()
   
 def GetOptionChoice():
-  OptionChoice = input('Select an option from the menu (or enter q to quit): ')
-  if OptionChoice == 'quit':
-    OptionChoice = 'q'
-    DisplayMenu()
-  else:
-    SetOptionChoice(OptionChoice)
+  OptionChoice = int(input('Select an option from the menu (or enter q to quit): '))
+  SetOptionChoice(OptionChoice)
   print()
   return OptionChoice
   
 def SetOptionChoice(OptionChoice):
-  if OptionChoice == '1':
-    SetAceHighOrLow()
- 
+  if OptionChoice == 1:
+   SetAceHigh = SetAceHighOrLow()
+   
 def SetAceHighOrLow():
+  print()
   AceHighOrLow = input('Do you want the Ace to be (h)igh or (l)ow: ')
   AceHighOrLow = AceHighOrLow.lower()
-  if AceHighOrLow == 'h':
-
-
+  if AceHighOrLow == 'l':
+    print()
+    print("Ace has been set to low")
+  elif AceHighOrLow == 'h':
+    print()
+    print("Ace has been set to high")
+  return AceHighOrLow
     
-  elif AceHighOrLow == 'l':
-    LoadDeck(Deck) 
-
 def LoadDeck(Deck):
   CurrentFile = open('deck.txt', 'r')
   Count = 1
@@ -157,12 +157,18 @@ def GetCard(ThisCard, Deck, NoOfCardsTurnedOver):
   Deck[52 - NoOfCardsTurnedOver].Suit = 0
   Deck[52 - NoOfCardsTurnedOver].Rank = 0
 
-def IsNextCardHigher(LastCard, NextCard):
+def IsNextCardHigher(LastCard, NextCard, AceHighOrLow):
   Higher = False
-  if NextCard.Rank > LastCard.Rank:
-    Higher = True
-  return Higher
+  if AceHighOrLow == 'h':
+    if NextCard.Rank > LastCard.Rank:
+      Higher = False
+      return Higher
+  elif AceHighOrLow == 'l':
+    if NextCard.Rank > LastCard.Rank:
+      Higher = True 
+      return Higher
 
+  
 def GetPlayerName():
   print()
   PlayerNameValid = False
@@ -273,7 +279,7 @@ def PlayGame(Deck, RecentScores):
       Choice = GetChoiceFromUser()
     DisplayCard(NextCard)
     NoOfCardsTurnedOver = NoOfCardsTurnedOver + 1
-    Higher = IsNextCardHigher(LastCard, NextCard)
+    Higher = IsNextCardHigher(LastCard, NextCard, AceHighOrLow)
     if (Higher and Choice == 'y') or (not Higher and Choice == 'n'):
       DisplayCorrectGuessMessage(NoOfCardsTurnedOver - 1)
       LastCard.Rank = NextCard.Rank
