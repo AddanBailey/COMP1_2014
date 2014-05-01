@@ -23,12 +23,12 @@ class TRecentScore():
 Deck = [None]
 RecentScores = [None]
 Choice = ''
-SetAceHigh = False
+AceHighOrLow = False
 
 
 def GetRank(RankNo):
   Rank = ''
-  if RankNo == 1:
+  if RankNo == 1 or RankNo == 14:
     Rank = 'Ace'
   elif RankNo == 2:
     Rank = 'Two'
@@ -95,29 +95,47 @@ def DisplayOptions():
   print('1. Set Ace to be HIGH or LOW')
   print()
   
+  
 def GetOptionChoice():
-  OptionChoice = int(input('Select an option from the menu (or enter q to quit): '))
-  SetOptionChoice(OptionChoice)
+  OptionValid = False
+  OptionChoice = input('Select an option from the menu (or enter q to quit): ')
+  OptionChoice = OptionChoice.lower()
   print()
+  while not OptionValid:
+    if OptionChoice == '1' or OptionChoice =='q':
+      OptionValid = True
+    else:
+      print('This choice is invalid')
+      print()
+      OptionChoice = input('Please enter a valid choice: ')
   return OptionChoice
+ 
   
 def SetOptionChoice(OptionChoice):
-  if OptionChoice == 1:
-   SetAceHigh = SetAceHighOrLow()
+  if OptionChoice == '1':
+    SetAceHighOrLow()
    
 def SetAceHighOrLow():
+  global AceHighOrLow
+  AceValid = False
+  AceHighOrLow = input('Do you want the Ace to be (h)igh or (l)ow: ').lower()
   print()
-  AceHighOrLow = input('Do you want the Ace to be (h)igh or (l)ow: ')
-  AceHighOrLow = AceHighOrLow.lower()
-  if AceHighOrLow == 'l':
-    print()
-    print("Ace has been set to low")
-  elif AceHighOrLow == 'h':
-    print()
-    print("Ace has been set to high")
-  return AceHighOrLow
+  AceHighOrLow = AceHighOrLow[0]
+  while not AceValid:
+    if AceHighOrLow == 'h' or AceHighOrLow == 'l':
+      AceValid = True
+    else:
+      print('Choice is not valid')
+      AceHighOrLow = input('Please try again: ')
+      AceValid = False
+      print()
+  if AceHighOrLow == 'h':
+    AceHighOrLow = True
+  elif AceHighOrLow == 'l':
+    AceHighOrLow = False
     
 def LoadDeck(Deck):
+  global AceHighOrLow
   CurrentFile = open('deck.txt', 'r')
   Count = 1
   while True:
@@ -128,6 +146,8 @@ def LoadDeck(Deck):
     Deck[Count].Suit = int(LineFromFile)
     LineFromFile = CurrentFile.readline()
     Deck[Count].Rank = int(LineFromFile)
+    if AceHighOrLow == True and Deck[Count].Rank == 1:
+      Deck[Count].Rank = 14
     Count = Count + 1
  
 def ShuffleDeck(Deck):
@@ -159,15 +179,9 @@ def GetCard(ThisCard, Deck, NoOfCardsTurnedOver):
 
 def IsNextCardHigher(LastCard, NextCard, AceHighOrLow):
   Higher = False
-  if AceHighOrLow == 'h':
-    if NextCard.Rank > LastCard.Rank:
-      Higher = False
-      return Higher
-  elif AceHighOrLow == 'l':
-    if NextCard.Rank > LastCard.Rank:
-      Higher = True 
-      return Higher
-
+  if NextCard.Rank > LastCard.Rank:
+    Higher = True
+  return Higher
   
 def GetPlayerName():
   print()
@@ -315,4 +329,5 @@ if __name__ == '__main__':
       ResetRecentScores(RecentScores)
     elif Choice == '5':
       DisplayOptions()
-      GetOptionChoice()
+      OptionChoice = GetOptionChoice()
+      SetOptionChoice(OptionChoice)
